@@ -31,6 +31,15 @@ const theme = createTheme({
       secondary: '#757575',
     },
   },
+  typography: {
+    fontFamily: '"Open Sans", sans-serif',
+    h1: {
+      fontFamily: '"Poppins", sans-serif',
+    },
+    h2: {
+      fontFamily: '"Poppins", sans-serif',
+    },
+  }
 });
 
 export default theme;
