@@ -6,8 +6,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
-import AlertComponent from '../components/AlertComponent';
-import MenuItemComponent from '../components/MenuItemComponent';
+import AlertComponent from '../components/Shared/AlertComponent';
+import MenuItemComponent from '../components/MenuPage/MenuItemComponent';
 
 export default function MenuPage(){
     const [companyName, _] = useState<string>(import.meta.env.VITE_COMPANY_NAME);

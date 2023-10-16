@@ -11,7 +11,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
-import AlertComponent from '../components/AlertComponent';
+import AlertComponent from '../components/Shared/AlertComponent';
 
 export default function HomePage(){
     const navigate = useNavigate();
