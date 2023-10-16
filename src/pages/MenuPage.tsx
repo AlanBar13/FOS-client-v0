@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
 import AlertComponent from '../components/AlertComponent';
+import MenuItemComponent from '../components/MenuItemComponent';
 
 export default function MenuPage(){
     const [companyName, _] = useState<string>(import.meta.env.VITE_COMPANY_NAME);
@@ -47,7 +48,9 @@ export default function MenuPage(){
                     Menu {companyName}
                 </Typography>
             </Box>
-            {isLoading ? <CircularProgress color='inherit' /> : <p>{JSON.stringify(menu)}</p>}
+            {isLoading ? (<CircularProgress color='inherit' />) : (
+                menu.map((item) => <MenuItemComponent key={item.id} item={item} />)
+            )}
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} >
                 <AlertComponent severity='error'>Error: {error}</AlertComponent>
             </Snackbar>

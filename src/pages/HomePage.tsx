@@ -13,7 +13,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
 import AlertComponent from '../components/AlertComponent';
 
-export default function Home(){
+export default function HomePage(){
     const navigate = useNavigate();
     const [companyName, _] = useState<string>(import.meta.env.VITE_COMPANY_NAME);
     const [selection, setSelection] = useState<string>("");
