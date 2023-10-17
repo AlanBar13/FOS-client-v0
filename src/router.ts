@@ -2,6 +2,7 @@ import {createBrowserRouter} from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import MenuPage from './pages/MenuPage';
 import AdminPage from './pages/AdminPage';
+import ErrorPage from './pages/ErrorPage';
 
 // Admin routes components
 import DashboardComponent from './components/AdminPage/DashboardComponent';
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
             }
         ]
     },
+    {
+        path: "*",
+        Component: ErrorPage
+    }
 ]);
 
 export default router;
