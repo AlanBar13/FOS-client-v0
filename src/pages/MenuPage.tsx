@@ -1,13 +1,13 @@
 import {useState, useEffect, SyntheticEvent} from 'react';
 import { Menu } from '../models/Menu';
 import { fetchMenu } from '../services/menu.service';
-import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
 import AlertComponent from '../components/Shared/AlertComponent';
 import MenuItemComponent from '../components/MenuPage/MenuItemComponent';
+import AppLayout from '../components/Shared/AppLayout';
 
 export default function MenuPage(){
     const [companyName, _] = useState<string>(import.meta.env.VITE_COMPANY_NAME);
@@ -42,7 +42,7 @@ export default function MenuPage(){
     }, []);
 
     return (
-        <Container>
+        <AppLayout companyName={companyName}>
             <Box>
                 <Typography>
                     Menu {companyName}
@@ -54,6 +54,6 @@ export default function MenuPage(){
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} >
                 <AlertComponent severity='error'>Error: {error}</AlertComponent>
             </Snackbar>
-        </Container>
+        </AppLayout>
     )
 }

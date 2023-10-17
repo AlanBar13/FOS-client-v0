@@ -2,7 +2,6 @@ import { useEffect, useState, SyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table } from '../models/Table';
 import { fetchTables } from '../services/table.service';
-import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import InputLabel from '@mui/material/InputLabel';
@@ -11,6 +10,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
+import AppLayout from '../components/Shared/AppLayout';
 import AlertComponent from '../components/Shared/AlertComponent';
 
 export default function HomePage(){
@@ -54,7 +54,7 @@ export default function HomePage(){
     }, [])
 
     return (
-        <Container>
+        <AppLayout companyName={companyName} hideCart={true}>
             <Box justifyContent="center" alignContent="center">
                 <Typography variant="h2" gutterBottom>
                     Bienvenido a {companyName}
@@ -76,6 +76,6 @@ export default function HomePage(){
                     <AlertComponent severity='error'>Error: {error}</AlertComponent>
                 </Snackbar>
             </Box>
-        </Container>
+        </AppLayout>
     )
 }
