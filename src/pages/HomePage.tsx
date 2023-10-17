@@ -28,7 +28,7 @@ export default function HomePage(){
         return navigate(`/menu?mesa=${tableId}`, { replace: true })
     }
 
-    const handleClose = (event?: SyntheticEvent | Event, reason?: string) => {
+    const handleClose = (_?: SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
           return;
         }

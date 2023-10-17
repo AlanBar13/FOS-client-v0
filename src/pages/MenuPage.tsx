@@ -16,7 +16,7 @@ export default function MenuPage(){
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const handleClose = (event?: SyntheticEvent | Event, reason?: string) => {
+    const handleClose = (_?: SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
           return;
         }
