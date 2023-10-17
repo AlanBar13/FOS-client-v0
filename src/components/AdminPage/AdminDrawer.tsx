@@ -61,7 +61,7 @@ export default function AdminDrawer({ drawerWidth = 240 }: AdminDrawerProps){
             <Divider />
             <List>
                 {pages.map(page => (
-                    <Tooltip title={page.title} placement="right">
+                    <Tooltip key={page.title} title={page.title} placement="right">
                         <ListItem disablePadding sx={{ display: 'block' }}>
                             <ListItemButton
                                 sx={{

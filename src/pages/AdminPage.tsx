@@ -8,7 +8,7 @@ export default function AdminPage(){
     return (
         <>
             <AdminDrawer drawerWidth={drawerWidth} />
-            <Box sx={{ flexGrow: 1, marginLeft: '4rem' } }>
+            <Box sx={{ flexGrow: 1, marginLeft: '4.5rem', marginRight: '1rem' } }>
                 <Outlet />
             </Box>
         </>
