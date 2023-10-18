@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CircularProgress from '@mui/material/CircularProgress';
+import { AlertColor } from '@mui/material/Alert';
 
 import { foodCategories } from '../../../utils/constants';
 import { Menu } from '../../../models/Menu';
@@ -20,6 +21,7 @@ import { uploadImage, addMenuItem } from '../../../services/menu.service';
 interface AddItemComponentProps {
     menu?: Menu | null
     onAddItem: (newItem: Menu) => void
+    onFeedback: (message: string, alertSeverity?: AlertColor) => void
 }
 
 const options = foodCategories.map(category => {
@@ -51,12 +53,12 @@ const defaultItem : Menu = {
     img: undefined
 }
 
-export default function AddItemComponent({ menu = null, onAddItem }: AddItemComponentProps){
+export default function AddItemComponent({ menu = null, onAddItem, onFeedback }: AddItemComponentProps){
     const [item, setItem] = useState<Menu>(menu !== null ? menu : defaultItem);
     const [imageLoading, setImageLoading] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [uploadText, setUploadText] = useState<string>("");
-    const disabled = useMemo(() => (!(item.name !== "" && item.category !== "" && item.price !== 0)), [item]);
+    const disabled = useMemo(() => (!(item.name !== "" && item.category !== "" && item.price !== 0 && !imageLoading)), [item, imageLoading]);
 
     const handleNameChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setItem({...item, name: event.target.value });
@@ -103,11 +105,12 @@ export default function AddItemComponent({ menu = null, onAddItem }: AddItemComp
             const response = await uploadImage(formData);
             setItem({...item, img: response.data.url});
             setUploadText(`Imagen cargada correctamente: ${file.name}`);
-            setImageLoading(false);
         } catch (error) {
-            console.error(error);
+            console.log(error);
+            onFeedback("Error al subir imagen");
             setUploadText(`Error cargando imagen`);
         }
+        setImageLoading(false);
     }
 
     const submitForm = async () => {
@@ -116,8 +119,11 @@ export default function AddItemComponent({ menu = null, onAddItem }: AddItemComp
             const newItem = await addMenuItem(item);
             onAddItem(newItem);
             setItem(defaultItem);
+            setUploadText("");
+            onFeedback(`Se agrego ${newItem.name} correctamente`, "success");
         } catch (error) {
-            console.error(error)
+            console.log(error);
+            onFeedback("Error al añadir el producto");
         }
         setIsLoading(false);
     }

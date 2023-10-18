@@ -18,6 +18,7 @@ import { formatDate } from '../../../utils/dates';
 interface MenuDataComponentProps {
     menu: Menu[]
     onMenuChange: (newMenu: Menu[]) => void
+    onError?: (message: string) => void
 }
 
 type Order = 'asc' | 'desc';
