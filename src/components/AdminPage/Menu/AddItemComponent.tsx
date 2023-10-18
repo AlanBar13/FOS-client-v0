@@ -1,4 +1,5 @@
 import { useState, useMemo, ChangeEvent } from 'react'
+
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Switch from '@mui/material/Switch';
@@ -10,6 +11,8 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CircularProgress from '@mui/material/CircularProgress';
+
 import { foodCategories } from '../../../utils/constants';
 import { Menu } from '../../../models/Menu';
 import { uploadImage, addMenuItem } from '../../../services/menu.service';
@@ -51,6 +54,7 @@ const defaultItem : Menu = {
 export default function AddItemComponent({ menu = null, onAddItem }: AddItemComponentProps){
     const [item, setItem] = useState<Menu>(menu !== null ? menu : defaultItem);
     const [imageLoading, setImageLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [uploadText, setUploadText] = useState<string>("");
     const disabled = useMemo(() => (!(item.name !== "" && item.category !== "" && item.price !== 0)), [item]);
 
@@ -107,6 +111,7 @@ export default function AddItemComponent({ menu = null, onAddItem }: AddItemComp
     }
 
     const submitForm = async () => {
+        setIsLoading(true);
         try {
             const newItem = await addMenuItem(item);
             onAddItem(newItem);
@@ -114,6 +119,7 @@ export default function AddItemComponent({ menu = null, onAddItem }: AddItemComp
         } catch (error) {
             console.error(error)
         }
+        setIsLoading(false);
     }
 
     return (
@@ -151,7 +157,9 @@ export default function AddItemComponent({ menu = null, onAddItem }: AddItemComp
                     </Typography>
                 </Grid>
                 <Grid item  xs={12}>
-                    <Button fullWidth variant='contained' color='success' sx={{color: 'white'}} onClick={submitForm} disabled={disabled}>Guardar</Button>
+                    <Button fullWidth variant='contained' color='success' sx={{color: 'white'}} onClick={submitForm} disabled={disabled}>
+                        {isLoading ? <CircularProgress /> : "Guardar"}
+                    </Button>
                 </Grid>
             </Grid>
         </FormGroup>
