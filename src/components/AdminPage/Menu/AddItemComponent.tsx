@@ -13,15 +13,19 @@ import Typography from '@mui/material/Typography';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CircularProgress from '@mui/material/CircularProgress';
 import { AlertColor } from '@mui/material/Alert';
+import Box from '@mui/material/Box';
 
 import { foodCategories } from '../../../utils/constants';
 import { Menu } from '../../../models/Menu';
-import { uploadImage, addMenuItem } from '../../../services/menu.service';
+import { uploadImage, addMenuItem, updateMenuItem } from '../../../services/menu.service';
 
 interface AddItemComponentProps {
     menu?: Menu | null
+    edit?: boolean
     onAddItem: (newItem: Menu) => void
     onFeedback: (message: string, alertSeverity?: AlertColor) => void
+    onUpdateItem?: (updatedItem: Menu) => void
+    onCancel?: () => void
 }
 
 const options = foodCategories.map(category => {
@@ -53,7 +57,7 @@ const defaultItem : Menu = {
     img: undefined
 }
 
-export default function AddItemComponent({ menu = null, onAddItem, onFeedback }: AddItemComponentProps){
+export default function AddItemComponent({ menu = null, edit, onAddItem, onFeedback, onUpdateItem, onCancel }: AddItemComponentProps){
     const [item, setItem] = useState<Menu>(menu !== null ? menu : defaultItem);
     const [imageLoading, setImageLoading] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -115,21 +119,35 @@ export default function AddItemComponent({ menu = null, onAddItem, onFeedback }:
 
     const submitForm = async () => {
         setIsLoading(true);
-        try {
-            const newItem = await addMenuItem(item);
-            onAddItem(newItem);
-            setItem(defaultItem);
-            setUploadText("");
-            onFeedback(`Se agrego ${newItem.name} correctamente`, "success");
-        } catch (error) {
-            console.log(error);
-            onFeedback("Error al añadir el producto");
+        if (edit && menu !== null) {
+            try {
+                const updatedItem = await updateMenuItem(item, menu.id!);
+                onUpdateItem!(updatedItem);
+                setItem(defaultItem);
+                setUploadText("");
+                onFeedback(`Se acrualizo ${updatedItem.name} correctamente`, "success");
+            } catch (error) {
+                console.log(error);
+                onFeedback("Error al actualizar el producto");
+            }
+            onCancel!()
+        }else {
+            try {
+                const newItem = await addMenuItem(item);
+                onAddItem(newItem);
+                setItem(defaultItem);
+                setUploadText("");
+                onFeedback(`Se agrego ${newItem.name} correctamente`, "success");
+            } catch (error) {
+                console.log(error);
+                onFeedback("Error al añadir el producto");
+            }
         }
         setIsLoading(false);
     }
 
     return (
-        <FormGroup sx={{marginBottom: '1rem'}}>
+        <FormGroup sx={{ marginTop: '0.5rem' }}>
             <Grid container spacing={2}>
                 <Grid item xs={6}>
                     <TextField fullWidth label="Nombre" required value={item.name} onChange={handleNameChange} />
@@ -147,13 +165,13 @@ export default function AddItemComponent({ menu = null, onAddItem, onFeedback }:
                 <Grid item xs={5}>
                     <TextField fullWidth label="IVA" type="number" InputProps={{ startAdornment: (<InputAdornment position='start'>$</InputAdornment>)}} value={item.tax?.toString()} onChange={handleTaxChange} />
                 </Grid>
-                <Grid item  xs={2}>
+                <Grid item xs={2}>
                     <FormControlLabel control={<Switch checked={item.available} onChange={handleAvailableChange} />} label="Disponible" />
                 </Grid>
-                <Grid item  xs={12}>
+                <Grid item xs={12}>
                     <TextField fullWidth label="Descripcion" multiline rows={3} value={item.description} onChange={handleDescriptionChange} />
                 </Grid>
-                <Grid item  xs={12}>
+                <Grid item xs={12}>
                     <Button component="label" variant='contained' startIcon={<CloudUploadIcon />}>
                         Subir imagen
                         <VisuallyHiddenInput type='file' onChange={handleImageChange} />
@@ -162,11 +180,32 @@ export default function AddItemComponent({ menu = null, onAddItem, onFeedback }:
                         {imageLoading ? " Cargando Imagen" : ` ${uploadText}`}
                     </Typography>
                 </Grid>
-                <Grid item  xs={12}>
-                    <Button fullWidth variant='contained' color='success' sx={{color: 'white'}} onClick={submitForm} disabled={disabled}>
-                        {isLoading ? <CircularProgress /> : "Guardar"}
-                    </Button>
-                </Grid>
+                {menu === null ? (
+                    <Grid item xs={12}>
+                        <Box sx={{position: 'relative' }}>
+                                <Button fullWidth variant='contained' color='success' sx={{color: 'white'}} onClick={submitForm} disabled={disabled}>
+                                    Guardar
+                                </Button>
+                                {isLoading && <CircularProgress size={24} sx={{ color: 'black', position: 'absolute', top: '50%', left: '50%', marginTop: '-12px', marginLeft: '-12px' }}/>}
+                            </Box>
+                    </Grid>
+                ) : (
+                    <>
+                        <Grid item xs={6}>
+                            <Button fullWidth variant='contained' color='error' sx={{color: 'white'}} onClick={onCancel} disabled={disabled}>
+                                Cancelar
+                            </Button>
+                        </Grid>
+                        <Grid item xs={6} alignItems="center">
+                            <Box sx={{position: 'relative' }}>
+                                <Button fullWidth variant='contained' color='success' sx={{color: 'white'}} onClick={submitForm} disabled={disabled}>
+                                    Guardar
+                                </Button>
+                                {isLoading && <CircularProgress size={24} sx={{ color: 'black', position: 'absolute', top: '50%', left: '50%', marginTop: '-12px', marginLeft: '-12px' }}/>}
+                            </Box>
+                        </Grid>
+                    </>
+                )}
             </Grid>
         </FormGroup>
     )

@@ -14,6 +14,14 @@ export const addMenuItem = async (item: Menu) : Promise<Menu> => {
     return (await api.post('/admin/menu', item)).data;
 }
 
+export const updateMenuItem = async (item: Menu, id: number) : Promise<Menu> => {
+    return (await api.patch(`/admin/menu/${id}`, item)).data;
+}
+
+export const deleteMenuItem = async (id: number) : Promise<Menu> => {
+    return (await api.delete(`/admin/menu/${id}`)).data;
+}
+
 export const uploadImage = async (formData: FormData) : Promise<AxiosResponse> => {
     return await api.post("/admin/menu/image/upload", formData, { headers: {"Content-Type": "multipart/form-data"}})
 }

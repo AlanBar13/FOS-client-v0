@@ -11,6 +11,10 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Chip from '@mui/material/Chip';
 import TablePagination from '@mui/material/TablePagination';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import Tooltip from '@mui/material/Tooltip';
 
 import { formatPriceFixed } from '../../../utils/numbers';
 import { formatDate } from '../../../utils/dates';
@@ -18,7 +22,8 @@ import { formatDate } from '../../../utils/dates';
 interface MenuDataComponentProps {
     menu: Menu[]
     onMenuChange: (newMenu: Menu[]) => void
-    onError?: (message: string) => void
+    onEditClicked: (id: number) => void
+    onDeleteClicked: (id: number) => void
 }
 
 type Order = 'asc' | 'desc';
@@ -101,13 +106,13 @@ const properties = [
     },
 ]
 
-export default function MenuDataComponent({ menu, onMenuChange }: MenuDataComponentProps){
+export default function MenuDataComponent({ menu, onMenuChange, onDeleteClicked, onEditClicked }: MenuDataComponentProps){
     const [order, setOrder] = useState<Order>('asc');
     const [orderBy, setOrderBy] = useState<keyof Menu>('id');
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [page, setPage] = useState(0);
     const visibleRows = useMemo(() => {
-        return menu.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+        return menu.sort(createCompareFn(orderBy, order)).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
     }, [menu, page, rowsPerPage])
 
     const handleSort = (property: keyof Menu) => {
@@ -125,7 +130,23 @@ export default function MenuDataComponent({ menu, onMenuChange }: MenuDataCompon
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
-      };
+    };
+
+    const onEditButtonClicked = (id?: number) => {
+        if (id == null){
+            return;
+        }
+
+        onEditClicked(id)
+    }
+
+    const onDeleteButtonClicked = (id?: number) => {
+        if (id == null){
+            return;
+        }
+
+        onDeleteClicked(id)
+    }
 
     return (
         <>
@@ -145,6 +166,12 @@ export default function MenuDataComponent({ menu, onMenuChange }: MenuDataCompon
                                     )}
                                 </TableCell>
                             ))}
+                            <TableCell>
+                                Editar
+                            </TableCell>
+                            <TableCell>
+                                Eliminar
+                            </TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -160,13 +187,27 @@ export default function MenuDataComponent({ menu, onMenuChange }: MenuDataCompon
                                 <TableCell>{item.img !== null ? <Chip color='primary' label="Agregada" /> : <Chip label="No Agregada" />}</TableCell>
                                 <TableCell>{formatDate(item.createdAt)}</TableCell>
                                 <TableCell>{formatDate(item.updatedAt)}</TableCell>
+                                <TableCell>
+                                    <Tooltip title={`Editar ${item.name}`}>
+                                        <IconButton onClick={() => onEditButtonClicked(item.id)}>
+                                            <EditIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                </TableCell>
+                                <TableCell>
+                                    <Tooltip title={`Eliminar ${item.name}`}>
+                                        <IconButton onClick={() => onDeleteButtonClicked(item.id)}>
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </Tooltip>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
             </TableContainer>
             <TablePagination
-                rowsPerPageOptions={[5, 10, 25]}
+                rowsPerPageOptions={[10, 15, 20]}
                 component="div"
                 count={menu.length}
                 rowsPerPage={rowsPerPage}
