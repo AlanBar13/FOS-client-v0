@@ -14,7 +14,7 @@ interface DialogComponentProps {
     children: ReactNode
     enableActions?: boolean
     onCancel: () => void
-    onConfirm: () => void
+    onConfirm?: () => void
 }
 
 export default function DialogComponent({isOpen, title, maxWidth = "md", children, enableActions = true, onCancel, onConfirm}: DialogComponentProps){
