@@ -15,7 +15,7 @@ export default function MenuItemComponent({ item }: MenuItemComponentProps){
             {item.img !== null ? (
                 <CardMedia
                     component="img"
-                    sx={{ width: 151 }}
+                    sx={{ width: 140 }}
                     image={item.img}
                     alt={item.name}
                 />

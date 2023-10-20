@@ -1,8 +1,11 @@
 import {useState, useEffect, SyntheticEvent} from 'react';
 import { Menu } from '../models/Menu';
 import { fetchMenu } from '../services/menu.service';
+
 import LinearProgress from '@mui/material/LinearProgress';
 import Snackbar from '@mui/material/Snackbar';
+import Box from '@mui/material/Box';
+
 import AlertComponent from '../components/Shared/AlertComponent';
 import MenuItemComponent from '../components/MenuPage/MenuItemComponent';
 import AppLayout from '../components/Shared/AppLayout';
@@ -41,9 +44,10 @@ export default function MenuPage(){
 
     return (
         <AppLayout companyName={`${companyName} | Menu`}>
-            {isLoading ? (<LinearProgress />) : (
-                menu.map((item) => <MenuItemComponent key={item.id} item={item} />)
-            )}
+            {isLoading && <LinearProgress />}
+            <Box sx={{marginTop: '0.5rem', marginLeft: '0.5rem', marginRight: '0.5rem'}}>
+                {menu.map((item) => <MenuItemComponent key={item.id} item={item} />)}
+            </Box>
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} >
                 <AlertComponent severity='error'>Error: {error}</AlertComponent>
             </Snackbar>
