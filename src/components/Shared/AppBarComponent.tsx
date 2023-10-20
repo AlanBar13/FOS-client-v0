@@ -14,7 +14,7 @@ interface AppBarComponentProps {
 
 export default function AppBarComponent({ companyName = "--", hideCart = false }: AppBarComponentProps) {
     return (
-        <AppBar position="static" style={{background: "#2E3B55"}}>
+        <AppBar position="sticky" style={{background: "#2E3B55"}}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Typography

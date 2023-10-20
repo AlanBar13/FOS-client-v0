@@ -1,9 +1,7 @@
 import {useState, useEffect, SyntheticEvent} from 'react';
 import { Menu } from '../models/Menu';
 import { fetchMenu } from '../services/menu.service';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import CircularProgress from '@mui/material/CircularProgress';
+import LinearProgress from '@mui/material/LinearProgress';
 import Snackbar from '@mui/material/Snackbar';
 import AlertComponent from '../components/Shared/AlertComponent';
 import MenuItemComponent from '../components/MenuPage/MenuItemComponent';
@@ -42,13 +40,8 @@ export default function MenuPage(){
     }, []);
 
     return (
-        <AppLayout companyName={companyName}>
-            <Box>
-                <Typography>
-                    Menu {companyName}
-                </Typography>
-            </Box>
-            {isLoading ? (<CircularProgress color='inherit' />) : (
+        <AppLayout companyName={`${companyName} | Menu`}>
+            {isLoading ? (<LinearProgress />) : (
                 menu.map((item) => <MenuItemComponent key={item.id} item={item} />)
             )}
             <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} >

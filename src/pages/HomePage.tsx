@@ -1,13 +1,11 @@
-import { useEffect, useState, SyntheticEvent } from 'react';
+import { useEffect, useState, SyntheticEvent, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table } from '../models/Table';
 import { fetchTables } from '../services/table.service';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import NativeSelect from '@mui/material/NativeSelect';
 import CircularProgress from '@mui/material/CircularProgress';
 import Snackbar from '@mui/material/Snackbar';
 import AppLayout from '../components/Shared/AppLayout';
@@ -22,8 +20,14 @@ export default function HomePage(){
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const selectTable = (event: SelectChangeEvent) => {
+    const selectTable = (event: ChangeEvent<HTMLSelectElement>) => {
         const tableId = event.target.value;
+        if (tableId === "0"){
+            setError("Mesa seleccionada no disponible");
+            setOpen(true);
+            return;
+        }
+
         setSelection(tableId);
         return navigate(`/menu?mesa=${tableId}`, { replace: true })
     }
@@ -54,22 +58,27 @@ export default function HomePage(){
     }, [])
 
     return (
-        <AppLayout companyName={companyName} hideCart={true}>
-            <Box justifyContent="center" alignContent="center">
-                <Typography variant="h2" gutterBottom>
+        <AppLayout companyName={`${companyName} | FOS`} hideCart={true}>
+            <Box sx={{height: '90vh', display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", alignContent: "center"}}>
+                <Typography variant="h4" gutterBottom>
                     Bienvenido a {companyName}
                 </Typography>
+                <Typography variant="subtitle1">
+                    Para iniciar elige mesa
+                </Typography>
                 {isLoading ? (<CircularProgress color='inherit' />) : (
-                    <FormControl fullWidth>
-                        <InputLabel id="table-select">Elige la mesa</InputLabel>
-                        <Select 
-                            labelId="table-select"
+                    <FormControl sx={{width: '80%'}}>
+                        <NativeSelect 
                             value={selection}
-                            label="Elige la Mesa"
+                            inputProps={{
+                                name: 'mesa',
+                                id: 'uncontrolled-native',
+                            }}
                             disabled={error !== null}
-                            onChange={selectTable}>
-                                {tables.map((table) => <MenuItem key={table.id} value={table.id}>{table.name}</MenuItem>)}
-                        </Select>
+                            onChange={e => selectTable(e)}>
+                                <option value={0}>Elige...</option>
+                                {tables.map((table) => <option key={table.id} value={table.id}>{table.name}</option>)}
+                        </NativeSelect>
                     </FormControl>
                 )}
                 <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} >
