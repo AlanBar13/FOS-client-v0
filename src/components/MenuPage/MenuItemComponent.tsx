@@ -60,9 +60,6 @@ export default function MenuItemComponent({ item, onAddClicked }: MenuItemCompon
                     </Typography>
                 </CardContent>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginBottom: '0.3rem'}}>
-                    <Typography sx={{marginRight: '0.3rem'}} component="span" variant="caption">
-                        max. 10
-                    </Typography>
                     <IconButton size='large' onClick={() => handleChange("-")}>-</IconButton>
                     <TextField sx={{width: '2.9rem', alignItems: 'flex-end'}} inputProps={{ inputMode: 'numeric', pattern: '[0-9]*', readOnly: true }} value={qty} />
                     <IconButton size='large' onClick={() => handleChange("+")}>+</IconButton>

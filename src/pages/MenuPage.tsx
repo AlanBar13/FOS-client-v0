@@ -96,7 +96,7 @@ export default function MenuPage(){
         }
         setCartIsLoading(true);
         //If there is no order create an order
-        if (orderId === null){
+        if (orderId == null){
             console.log('no active order')
             try {
                 const orderCreated = await createOrder(tableId);
@@ -167,7 +167,7 @@ export default function MenuPage(){
                     <Puller />
                     <Typography component="div" sx={{ p: 2, color: 'text.secondary.contrastText' }}>
                         <strong>
-                            {orderId !== null && `Orden #${orderId} |`} {tableId !== null ? `Mesa ${tableId}` : `No hay mesa seleccionada`} | Carrito ({cart.length})
+                            {orderId != null && `Orden #${orderId} |`} {tableId !== null ? `Mesa ${tableId}` : `No hay mesa seleccionada`} | Carrito ({cart.length})
                         </strong>
                     </Typography>
                 </StyledBox>
