@@ -20,12 +20,31 @@ interface CartComponentProps {
 }
 
 export default function CartComponent({ cart, isLoading = false, orderedItems = [], deleteFromCart, onOrder }: CartComponentProps) {
-    const orderTotal = useMemo(() => _.sumBy(cart, 'total'), [cart]);
+    const cartTotal = useMemo(() => _.sumBy(cart, 'total'), [cart]);
+    const orderTotal = useMemo(() => {
+        let total = 0;
+        orderedItems.forEach((item) => {
+            if(item.Menu == null){
+                return;
+            }
+
+            if(item.Menu.tax != null) {
+                total = total + ((item.Menu.price + item.Menu.tax) * item.qty);
+            }else{
+                total = total + (item.Menu.price * item.qty)
+            }
+        });
+
+        return total;
+    }, [cart]);
 
     return (
         <Box sx={{display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between'}}>
             <Box>
                 <Box sx={{overflow: 'auto'}}>
+                    <Typography variant='h6'>
+                        Carrito
+                    </Typography>
                     {cart.map((crt, index) => (
                         <Box key={index} sx={{display: 'flex', flexDirection: 'row'}}>
                             <IconButton onClick={() => deleteFromCart(index)}>X</IconButton>
@@ -34,14 +53,20 @@ export default function CartComponent({ cart, isLoading = false, orderedItems = 
                             </Typography>
                         </Box>
                     ))}
+                    <Typography sx={{paddingTop: '0.5rem'}} component="div">
+                        <strong>SubTotal: {formatPriceFixed(cartTotal)}</strong>
+                    </Typography>
                 </Box>
                 {orderedItems.length > 0 && (
                     <Box sx={{overflow: 'auto'}}>
                         <Divider />
+                        <Typography variant='h6'>
+                            Resumen Orden
+                        </Typography>
                         {orderedItems.map((item, index) => (
                             <Box key={index} sx={{display: 'flex', flexDirection: 'row'}}>
                                 <Typography sx={{paddingTop: '0.55rem'}}>
-                                    {item.menuId}
+                                    {item.qty}x - {item.Menu?.name} - {formatPriceFixed(item.Menu!.price * item.qty)}
                                 </Typography>
                             </Box>
                         ))}
@@ -53,7 +78,7 @@ export default function CartComponent({ cart, isLoading = false, orderedItems = 
                 {isLoading && <LinearProgress />}
                 <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                     <Typography sx={{paddingTop: '0.5rem'}} component="div">
-                        <strong>Total: {formatPriceFixed(orderTotal)}</strong>
+                        <strong>Total a pagar: {formatPriceFixed(orderTotal)}</strong>
                     </Typography>
                     <Button disabled={cart.length === 0} onClick={onOrder}>Ordenar</Button>
                 </Box>

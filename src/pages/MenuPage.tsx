@@ -68,6 +68,10 @@ export default function MenuPage(){
                     const getOrder = await getActiveOrder(tableId);
                     const order = getOrder.data.orderId as number;
                     setOrderId(order);
+                    const items = getOrder.data.items as OrderItem[];
+                    if (items.length > 0){
+                        setItemsOrdered(items);
+                    }
                 }
             } catch (error: any) {
                 setError((error as Error).message);
@@ -114,7 +118,11 @@ export default function MenuPage(){
                         qty: crt.qty,
                         //TODO: add comments
                     });
-                    setItemsOrdered([...itemsOrdered, newOrderItem]);
+                    console.log(newOrderItem.data);
+                    const newItem = newOrderItem.data.item as OrderItem;
+                    newItem.Menu = newOrderItem.data.menu as Menu;
+                    console.log(newItem);
+                    setItemsOrdered([...itemsOrdered, newItem]);
                     //emit socket
                     setCart([]);
                 } catch (error) {

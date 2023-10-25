@@ -24,6 +24,6 @@ export const createOrder = async (tableId: string): Promise<Order> => {
     return (await api.post(`/table/${tableId}/order`)).data;
 }
 
-export const addOrderItem = async (tableId: string, order: number, item: OrderItem): Promise<OrderItem> => {
-    return (await api.post(`/table/${tableId}/order/${order}/add`, item)).data;
+export const addOrderItem = async (tableId: string, order: number, item: OrderItem): Promise<AxiosResponse> => {
+    return await api.post(`/table/${tableId}/order/${order}/add`, item);
 }
