@@ -40,7 +40,7 @@ export default function CartComponent({ cart, isLoading = false, orderedItems = 
 
     return (
         <Box sx={{display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between'}}>
-            <Box>
+            <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                 <Box sx={{overflow: 'auto'}}>
                     <Typography variant='h6'>
                         Carrito
@@ -48,7 +48,7 @@ export default function CartComponent({ cart, isLoading = false, orderedItems = 
                     {cart.map((crt, index) => (
                         <Box key={index} sx={{display: 'flex', flexDirection: 'row'}}>
                             <IconButton onClick={() => deleteFromCart(index)}>X</IconButton>
-                            <Typography sx={{paddingTop: '0.55rem'}}>
+                            <Typography sx={{paddingTop: '0.55rem'}} fontSize={13}>
                                 {crt.qty}x - {crt.item.name} - {formatPriceFixed(crt.total)}
                             </Typography>
                         </Box>
@@ -56,7 +56,9 @@ export default function CartComponent({ cart, isLoading = false, orderedItems = 
                     <Typography sx={{paddingTop: '0.5rem'}} component="div">
                         <strong>SubTotal: {formatPriceFixed(cartTotal)}</strong>
                     </Typography>
+                    <Button variant='contained' disabled={cart.length === 0} onClick={onOrder}>Ordenar</Button>
                 </Box>
+                <Divider orientation='vertical' flexItem />
                 {orderedItems.length > 0 && (
                     <Box sx={{overflow: 'auto'}}>
                         <Divider />
@@ -65,7 +67,7 @@ export default function CartComponent({ cart, isLoading = false, orderedItems = 
                         </Typography>
                         {orderedItems.map((item, index) => (
                             <Box key={index} sx={{display: 'flex', flexDirection: 'row'}}>
-                                <Typography sx={{paddingTop: '0.55rem'}}>
+                                <Typography sx={{paddingTop: '0.55rem'}} fontSize={13}>
                                     {item.qty}x - {item.Menu?.name} - {formatPriceFixed(item.Menu!.price * item.qty)}
                                 </Typography>
                             </Box>
@@ -77,10 +79,10 @@ export default function CartComponent({ cart, isLoading = false, orderedItems = 
                 <Divider />
                 {isLoading && <LinearProgress />}
                 <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                    <Button disabled={orderedItems.length === 0}>Pagar</Button>
                     <Typography sx={{paddingTop: '0.5rem'}} component="div">
                         <strong>Total a pagar: {formatPriceFixed(orderTotal)}</strong>
                     </Typography>
-                    <Button disabled={cart.length === 0} onClick={onOrder}>Ordenar</Button>
                 </Box>
             </Box>
         </Box>
