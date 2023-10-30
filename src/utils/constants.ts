@@ -1,35 +1,32 @@
-export const orderStatus = {
-    created: "Creado",
-    ordering: "Ordenando",
-    deleted: "Borrado", 
-    paid: "Pagado", 
-    "not-paid": "No pagado",
-    inKitchen: "Preparando",
-    served: "Servido",
-    "user-closed": "Cerrado usuario"
+export class OrderStatus {
+    static readonly created = "created";
+    static readonly ordering = "ordering";
+    static readonly deleted = "deleted";
+    static readonly paid = "paid";
+    static readonly notPaid = "not-paid";
+    static readonly inKitchen = "inKitchen";
+    static readonly served = "served";
+    static readonly userClosed = "user-closed";
 }
 
-export const itemStatus = {
-    ordered: "Ordenado", 
-    inProgress: "Preparando", 
-    done: "Listo"
+export class ItemStatus {
+    static readonly ordered = "ordered";
+    static readonly inProgress = "inProgress";
+    static readonly done = "done";
 }
 
-export const userRoles = {
-    admin: "Administrador", 
-    viewer: "Comandas",
-    waiter: "Mesero",
+export class UserRoles {
+    static readonly dev = "dev";
+    static readonly admin = "admin";
+    static readonly viewer = "viewer";
+    static readonly waiter = "waiter";
 }
 
-export const serverOrderStatus = {
-    created: "created",
-    ordering: "ordering",
-    deleted: "deleted", 
-    paid: "paid", 
-    "not-paid": "not-paid",
-    inKitchen: "inKitchen",
-    served: "served",
-    "user-closed": "user-closed"
+export class FoodCategories {
+    static readonly mainDish = "Plato Fuerte";
+    static readonly sideDish = "Aperitivo";
+    static readonly drinks = "Bebida";
+    static readonly dessert = "Postre";
 }
 
 // export const foodCategories : Categories = {
